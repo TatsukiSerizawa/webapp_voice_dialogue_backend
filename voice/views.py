@@ -40,7 +40,7 @@ def transcribe_audio(request):
 
     # GPT-4 で返答生成
     response = client.chat.completions.create(
-        model="gpt-4",
+        model="gpt-4o-mini",
         messages=[{"role": "user", "content": text}]
     )
     gpt_response = response.choices[0].message.content
