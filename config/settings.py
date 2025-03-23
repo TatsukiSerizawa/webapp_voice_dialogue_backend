@@ -22,6 +22,7 @@ dotenv_path = os.path.join(os.path.dirname(__file__), "../.env")
 load_dotenv(dotenv_path)
 OEPNAI_API_KEY = os.getenv("OPENAI_API_KEY")
 NIJI_VOICE_API_KEY = os.getenv("NIJI_VOICE_API_KEY")
+ALLOWED_HOSTS = ["myPythonApp.azurewebsites.net", "localhost"]
 
 if not OEPNAI_API_KEY:
     raise ValueError("OPENAI_API_KEYが設定されていません。")
@@ -53,6 +54,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "whitenoise.runserver_nostatic",
     "rest_framework",
     "voice",
     "corsheaders",
@@ -67,6 +69,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
 ]
 
 ROOT_URLCONF = "config.urls"
