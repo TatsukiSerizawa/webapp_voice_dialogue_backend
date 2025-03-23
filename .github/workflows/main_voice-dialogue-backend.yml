@@ -35,7 +35,7 @@ jobs:
       # Optional: Add step to run tests here (PyTest, Django test suites, etc.)
 
       - name: Zip artifact for deployment
-        run: zip release.zip ./* -r
+        run: zip -r release.zip . -x "venv/*" ".git/*" ".github/*"
 
       - name: Upload artifact for deployment jobs
         uses: actions/upload-artifact@v4
@@ -71,6 +71,9 @@ jobs:
           client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_750575CB37694CEB90CD0E660A11A5D7 }}
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Remove WEBSITE_RUN_FROM_PACKAGE setting
+        run: az webapp config appsettings delete --name voice-dialogue-backend --resource-group voice_dialogue --setting-names WEBSITE_RUN_FROM_PACKAGE
 
       - name: 'Deploy using Azure CLI'
         run: |
