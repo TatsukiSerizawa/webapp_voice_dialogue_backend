@@ -35,15 +35,15 @@ jobs:
       # Optional: Add step to run tests here (PyTest, Django test suites, etc.)
 
       - name: Zip artifact for deployment
-        run: |
-          zip -r release.zip . -x "venv/*" ".git/*" ".github/*"
-          unzip -l release.zip
+        run: zip release.zip ./* -r
 
       - name: Upload artifact for deployment jobs
         uses: actions/upload-artifact@v4
         with:
           name: python-app
-          path: release.zip
+          path: |
+            release.zip
+            !venv/
 
   deploy:
     runs-on: ubuntu-latest
@@ -51,10 +51,7 @@ jobs:
     environment:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
-    permissions:
-      id-token: write #This is required for requesting the JWT
-      contents: read #This is required for actions/checkout
-
+    
     steps:
       - name: Download artifact from build job
         uses: actions/download-artifact@v4
@@ -65,39 +62,10 @@ jobs:
         run: unzip release.zip
 
       
-      - name: Login to Azure
-        uses: azure/login@v2
+      - name: 'Deploy to Azure Web App'
+        uses: azure/webapps-deploy@v3
+        id: deploy-to-webapp
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_750575CB37694CEB90CD0E660A11A5D7 }}
-          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-
-      - name: Remove WEBSITE_RUN_FROM_PACKAGE and SCM_DO_BUILD_DURING_DEPLOYMENT settings
-        run: |
-          az webapp config appsettings delete --name voice-dialogue-backend --resource-group voice_dialogue --setting-names WEBSITE_RUN_FROM_PACKAGE || true
-          az webapp config appsettings delete --name voice-dialogue-backend --resource-group voice_dialogue --setting-names SCM_DO_BUILD_DURING_DEPLOYMENT || true
-          az webapp restart --name voice-dialogue-backend --resource-group voice_dialogue
-
-      # - name: Reset ongoing deployments
-      #   run: |
-      #     deployments=$(az webapp deployment list --name voice-dialogue-backend --resource-group voice_dialogue --query "[].id" --output tsv)
-      #     for deployment_id in $deployments; do
-      #       az rest --method delete --uri "https://management.azure.com${deployment_id}?api-version=2021-02-01" || true
-      #     done
-
-      # - name: Reset Kudu (Deployment Engine)
-      #   run: |
-      #     az webapp deployment source sync --name voice-dialogue-backend --resource-group voice_dialogue
-      #     az webapp restart --name voice-dialogue-backend --resource-group voice_dialogue
-
-      - name: 'Deploy using Azure CLI'
-        run: |
-          az webapp deploy --resource-group voice_dialogue --name voice-dialogue-backend --src-path release.zip --type zip
-
-      # - name: 'Deploy to Azure Web App'
-      #   uses: azure/webapps-deploy@v3
-      #   id: deploy-to-webapp
-      #   with:
-      #     app-name: 'voice-dialogue-backend'
-      #     # publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-      #     package: '.'
+          app-name: 'voice-dialogue-backend'
+          slot-name: 'Production'
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_CD9296D1210F4795824D3820E267554B }}
