@@ -83,7 +83,12 @@ jobs:
       #     for deployment_id in $deployments; do
       #       az rest --method delete --uri "https://management.azure.com${deployment_id}?api-version=2021-02-01" || true
       #     done
-          
+
+      - name: Reset Kudu (Deployment Engine)
+        run: |
+          az webapp deployment source sync --name voice-dialogue-backend --resource-group voice_dialogue
+          az webapp restart --name voice-dialogue-backend --resource-group voice_dialogue
+
       - name: 'Deploy using Azure CLI'
         run: |
           az webapp deploy --resource-group voice_dialogue --name voice-dialogue-backend --src-path release.zip --type zip
