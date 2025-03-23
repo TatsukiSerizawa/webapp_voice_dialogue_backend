@@ -78,4 +78,5 @@ jobs:
         with:
           app-name: 'voice-dialogue-backend'
           slot-name: 'Production'
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
           
