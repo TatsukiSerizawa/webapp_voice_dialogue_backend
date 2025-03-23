@@ -77,12 +77,12 @@ jobs:
           az webapp config appsettings delete --name voice-dialogue-backend --resource-group voice_dialogue --setting-names WEBSITE_RUN_FROM_PACKAGE || true
           az webapp restart --name voice-dialogue-backend --resource-group voice_dialogue
 
-      - name: Reset ongoing deployments
-        run: |
-          deployments=$(az webapp deployment list --name voice-dialogue-backend --resource-group voice_dialogue --query "[].id" --output tsv)
-          for deployment_id in $deployments; do
-            az rest --method delete --uri "https://management.azure.com${deployment_id}?api-version=2021-02-01" || true
-          done
+      # - name: Reset ongoing deployments
+      #   run: |
+      #     deployments=$(az webapp deployment list --name voice-dialogue-backend --resource-group voice_dialogue --query "[].id" --output tsv)
+      #     for deployment_id in $deployments; do
+      #       az rest --method delete --uri "https://management.azure.com${deployment_id}?api-version=2021-02-01" || true
+      #     done
           
       - name: 'Deploy using Azure CLI'
         run: |
