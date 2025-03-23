@@ -72,9 +72,10 @@ jobs:
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-      - name: Remove WEBSITE_RUN_FROM_PACKAGE setting
+      - name: Remove WEBSITE_RUN_FROM_PACKAGE and SCM_DO_BUILD_DURING_DEPLOYMENT settings
         run: |
           az webapp config appsettings delete --name voice-dialogue-backend --resource-group voice_dialogue --setting-names WEBSITE_RUN_FROM_PACKAGE || true
+          az webapp config appsettings delete --name voice-dialogue-backend --resource-group voice_dialogue --setting-names SCM_DO_BUILD_DURING_DEPLOYMENT || true
           az webapp restart --name voice-dialogue-backend --resource-group voice_dialogue
 
       # - name: Reset ongoing deployments
@@ -84,10 +85,10 @@ jobs:
       #       az rest --method delete --uri "https://management.azure.com${deployment_id}?api-version=2021-02-01" || true
       #     done
 
-      - name: Reset Kudu (Deployment Engine)
-        run: |
-          az webapp deployment source sync --name voice-dialogue-backend --resource-group voice_dialogue
-          az webapp restart --name voice-dialogue-backend --resource-group voice_dialogue
+      # - name: Reset Kudu (Deployment Engine)
+      #   run: |
+      #     az webapp deployment source sync --name voice-dialogue-backend --resource-group voice_dialogue
+      #     az webapp restart --name voice-dialogue-backend --resource-group voice_dialogue
 
       - name: 'Deploy using Azure CLI'
         run: |
