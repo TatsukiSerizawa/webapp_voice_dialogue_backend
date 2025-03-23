@@ -35,15 +35,15 @@ jobs:
       # Optional: Add step to run tests here (PyTest, Django test suites, etc.)
 
       - name: Zip artifact for deployment
-        run: zip -r release.zip . -x "venv/*" ".git/*" ".github/*"
+        run: |
+          zip -r release.zip . -x "venv/*" ".git/*" ".github/*"
+          unzip -l release.zip
 
       - name: Upload artifact for deployment jobs
         uses: actions/upload-artifact@v4
         with:
           name: python-app
-          path: |
-            release.zip
-            !venv/
+          path: release.zip
 
   deploy:
     runs-on: ubuntu-latest
@@ -73,11 +73,17 @@ jobs:
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
       - name: Remove WEBSITE_RUN_FROM_PACKAGE setting
-        run: az webapp config appsettings delete --name voice-dialogue-backend --resource-group voice_dialogue --setting-names WEBSITE_RUN_FROM_PACKAGE
+        run: |
+          az webapp config appsettings delete --name voice-dialogue-backend --resource-group voice_dialogue --setting-names WEBSITE_RUN_FROM_PACKAGE || true
+          az webapp restart --name voice-dialogue-backend --resource-group voice_dialogue
 
+      - name: Reset ongoing deployment
+        run: |
+          az webapp deployment delete --name voice-dialogue-backend --resource-group voice_dialogue --slot production || true
+          
       - name: 'Deploy using Azure CLI'
         run: |
-          az webapp deployment source config-zip --resource-group voice_dialogue --name voice-dialogue-backend --src release.zip
+          az webapp deploy --resource-group voice_dialogue --name voice-dialogue-backend --src-path release.zip --type zip
 
       # - name: 'Deploy to Azure Web App'
       #   uses: azure/webapps-deploy@v3
