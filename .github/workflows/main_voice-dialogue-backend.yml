@@ -72,10 +72,14 @@ jobs:
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-      - name: 'Deploy to Azure Web App'
-        uses: azure/webapps-deploy@v3
-        id: deploy-to-webapp
-        with:
-          app-name: 'voice-dialogue-backend'
-          # publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-          package: '.'
+      - name: 'Deploy using Azure CLI'
+        run: |
+          az webapp deployment source config-zip --resource-group voice_dialogue --name voice-dialogue-backend --src release.zip
+
+      # - name: 'Deploy to Azure Web App'
+      #   uses: azure/webapps-deploy@v3
+      #   id: deploy-to-webapp
+      #   with:
+      #     app-name: 'voice-dialogue-backend'
+      #     # publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+      #     package: '.'
