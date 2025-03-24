@@ -18,11 +18,12 @@ from dotenv import load_dotenv
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # API KEY
-dotenv_path = os.path.join(os.path.dirname(__file__), "../.env")
-load_dotenv(dotenv_path)
+# dotenv_path = os.path.join(os.path.dirname(__file__), "../.env")
+# load_dotenv(dotenv_path)
 OEPNAI_API_KEY = os.getenv("OPENAI_API_KEY")
 NIJI_VOICE_API_KEY = os.getenv("NIJI_VOICE_API_KEY")
-ALLOWED_HOSTS = ["myPythonApp.azurewebsites.net", "localhost"]
+ALLOWED_HOSTS = ["voice-dialogue-backend.azurewebsites.net", "localhost"]
+# ALLOWED_HOSTS = ["*"]
 
 if not OEPNAI_API_KEY:
     raise ValueError("OPENAI_API_KEYが設定されていません。")
@@ -39,6 +40,7 @@ MEDIA_ROOT = os.path.join(MEDIA_BASE_DIR, "media")
 STATIC_URL = "/static/"
 # Azure で正しく動作するように STATIC_ROOT を設定
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY")
@@ -139,12 +141,6 @@ TIME_ZONE = "Asia/Tokyo"
 USE_I18N = True
 
 USE_TZ = True
-
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.1/howto/static-files/
-
-STATIC_URL = "static/"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
