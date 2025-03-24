@@ -40,7 +40,6 @@ STATIC_URL = "/static/"
 # Azure で正しく動作するように STATIC_ROOT を設定
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
-
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY")
 
