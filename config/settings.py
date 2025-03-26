@@ -22,7 +22,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # load_dotenv(dotenv_path)
 OEPNAI_API_KEY = os.getenv("OPENAI_API_KEY")
 NIJI_VOICE_API_KEY = os.getenv("NIJI_VOICE_API_KEY")
-ALLOWED_HOSTS = ["voice-dialogue-backend.azurewebsites.net", "localhost"]
+ALLOWED_HOSTS = ["voice-dialogue-backend-bzazcff4dmdrdvh4.japaneast-01.azurewebsites.net", "localhost"]
 # ALLOWED_HOSTS = ["*"]
 
 if not OEPNAI_API_KEY:
