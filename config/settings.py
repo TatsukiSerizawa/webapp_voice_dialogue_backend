@@ -147,10 +147,14 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 CORS_ALLOWED_ORIGINS = [
     "https://zealous-stone-01b1dce00.6.azurestaticapps.net",  # フロントエンドのURL
-    "http://127.0.0.1:3000",  # これも追加するとより安全
+    "http://localhost:3000",  # これも追加するとより安全
 ]
 
 # CORS_ALLOW_ALL_ORIGINS = True
+
+CORS_ALLOW_CREDENTIALS = True  # 認証情報を含む場合
+CORS_ALLOW_METHODS = ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
+CORS_ALLOW_HEADERS = ["*"]
 
 SECURE_SSL_REDIRECT = True  # HTTP から HTTPS へリダイレクト
 CSRF_COOKIE_SECURE = True   # CSRF クッキーを HTTPS のみで送信
