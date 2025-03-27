@@ -67,6 +67,7 @@ MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -144,4 +145,13 @@ USE_TZ = True
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOWED_ORIGINS = [
+    "https://zealous-stone-01b1dce00.6.azurestaticapps.net",  # フロントエンドのURL
+    "http://127.0.0.1:3000",  # これも追加するとより安全
+]
+
+# CORS_ALLOW_ALL_ORIGINS = True
+
+SECURE_SSL_REDIRECT = True  # HTTP から HTTPS へリダイレクト
+CSRF_COOKIE_SECURE = True   # CSRF クッキーを HTTPS のみで送信
+SESSION_COOKIE_SECURE = True  # セッション情報も HTTPS のみ
