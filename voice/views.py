@@ -9,6 +9,7 @@ from django.conf import settings
 
 @api_view(['POST'])
 def transcribe_audio(request):
+    print("Request FILES:", request.FILES)
     api_key = os.getenv("OPENAI_API_KEY")  # 🔹 ここで環境変数を取得
     client = OpenAI(api_key=api_key)
 
