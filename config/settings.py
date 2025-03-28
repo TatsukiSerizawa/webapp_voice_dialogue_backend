@@ -150,9 +150,9 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",  # これも追加するとより安全
 ]
 
-# CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_ALL_ORIGINS = True
 
-CORS_ALLOW_CREDENTIALS = True  # 認証情報を含む場合
+CORS_ALLOW_CREDENTIALS = False  # 認証情報を含む場合
 CORS_ALLOW_METHODS = ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
 CORS_ALLOW_HEADERS = ["*"]
 
