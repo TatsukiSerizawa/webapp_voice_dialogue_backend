@@ -59,25 +59,25 @@ def transcribe_audio(request):
     print("音声合成完了")
     
     # 音声ファイルとして保存
-    # audio_path = "media/response.wav"
+    audio_path = "media/response.wav"
     try:
-        # with open(audio_path, "wb") as f:
-        #     f.write(voice_data)
+        with open(audio_path, "wb") as f:
+            f.write(voice_data)
         
-        # if os.path.exists(audio_path):
-        #     file_size = os.path.getsize(audio_path)
-        #     print(f"ファイル正常保存: {audio_path}, サイズ: {file_size} バイト")
-        # else:
-        #     print(f"警告: ファイルが保存されていません: {audio_path}")
-        #     return Response({"text": gpt_response, "error": "ファイル保存失敗"}, status=500)
+        if os.path.exists(audio_path):
+            file_size = os.path.getsize(audio_path)
+            print(f"ファイル正常保存: {audio_path}, サイズ: {file_size} バイト")
+        else:
+            print(f"警告: ファイルが保存されていません: {audio_path}")
+            return Response({"text": gpt_response, "error": "ファイル保存失敗"}, status=500)
 
-        # audio_url = request.build_absolute_uri("/media/response.wav")
+        audio_url = request.build_absolute_uri("/media/response.wav")
         
-        timestamp = datetime.now().strftime('%Y%m%d_%H%M%S_%f')[:-3]
-        filename = f"response_{timestamp}.wav"
+        # timestamp = datetime.now().strftime('%Y%m%d_%H%M%S_%f')[:-3]
+        # filename = f"response_{timestamp}.wav"
 
-        # Azure Blob にアップロード
-        audio_url = upload_to_azure_blob(voice_data, filename)
+        # # Azure Blob にアップロード
+        # audio_url = upload_to_azure_blob(voice_data, filename)
 
         return Response({"text": gpt_response, "audio_url": audio_url})
     except Exception as e:
