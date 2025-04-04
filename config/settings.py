@@ -30,7 +30,8 @@ NIJI_VOICE_API_KEY = os.getenv("NIJI_VOICE_API_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ["https://voice-dialogue-backend.azurewebsites.net"]
+# ALLOWED_HOSTS = ["https://voice-dialogue-backend.azurewebsites.net"]
+ALLOWED_HOSTS = ["*"]
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 MEDIA_URL = '/media/'
@@ -134,8 +135,8 @@ STATIC_URL = "static/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-CORS_ALLOW_ALL_ORIGINS = False
-CORS_ALLOWED_ORIGINS = [
-    "https://zealous-stone-01b1dce00.6.azurestaticapps.net",  # 本番フロントエンド
-    "http://localhost:3000"               # ローカル開発用
-]
+CORS_ALLOW_ALL_ORIGINS = True
+# CORS_ALLOWED_ORIGINS = [
+#     "https://zealous-stone-01b1dce00.6.azurestaticapps.net",  # 本番フロントエンド
+#     "http://localhost:3000"               # ローカル開発用
+# ]
