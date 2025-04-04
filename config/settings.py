@@ -32,7 +32,7 @@ AZURE_CONTAINER_NAME = os.getenv("AZURE_CONTAINER_NAME")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ["https://voice-dialogue-backend.azurewebsites.net"]
+ALLOWED_HOSTS = ["voice-dialogue-backend.azurewebsites.net"]
 # ALLOWED_HOSTS = ["*"]
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
