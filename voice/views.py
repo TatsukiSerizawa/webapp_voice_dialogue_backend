@@ -6,6 +6,9 @@ from django.core.files.storage import default_storage
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from django.conf import settings
+from azure.storage.blob import BlobServiceClient
+from django.conf import settings
+from datetime import datetime
 
 @api_view(['POST'])
 def transcribe_audio(request):
@@ -56,21 +59,25 @@ def transcribe_audio(request):
     print("音声合成完了")
     
     # 音声ファイルとして保存
-    # audio_path = os.path.join(settings.MEDIA_ROOT, "response.wav")
-    audio_path = "media/response.wav"
+    # audio_path = "media/response.wav"
     try:
-        with open(audio_path, "wb") as f:
-            f.write(voice_data)
+        # with open(audio_path, "wb") as f:
+        #     f.write(voice_data)
         
-        if os.path.exists(audio_path):
-            file_size = os.path.getsize(audio_path)
-            print(f"ファイル正常保存: {audio_path}, サイズ: {file_size} バイト")
-        else:
-            print(f"警告: ファイルが保存されていません: {audio_path}")
-            return Response({"text": gpt_response, "error": "ファイル保存失敗"}, status=500)
+        # if os.path.exists(audio_path):
+        #     file_size = os.path.getsize(audio_path)
+        #     print(f"ファイル正常保存: {audio_path}, サイズ: {file_size} バイト")
+        # else:
+        #     print(f"警告: ファイルが保存されていません: {audio_path}")
+        #     return Response({"text": gpt_response, "error": "ファイル保存失敗"}, status=500)
 
-        # audio_url = f"{settings.BACKEND_URL}/media/response.wav"
-        audio_url = request.build_absolute_uri("/media/response.wav")
+        # audio_url = request.build_absolute_uri("/media/response.wav")
+        
+        timestamp = datetime.now().strftime('%Y%m%d_%H%M%S_%f')[:-3]
+        filename = f"response_{timestamp}.wav"
+
+        # Azure Blob にアップロード
+        audio_url = upload_to_azure_blob(voice_data, filename)
 
         return Response({"text": gpt_response, "audio_url": audio_url})
     except Exception as e:
@@ -102,3 +109,15 @@ def synthesize_voice(text):
     except requests.exceptions.RequestException as e:
         print(f"エラーが発生しました: {e}")
     return audio_response.content
+
+# 音声のblob保存
+def upload_to_azure_blob(file_data: bytes, filename: str) -> str:
+    connection_string = settings.AZURE_STORAGE_CONNECTION_STRING
+    container_name = settings.AZURE_CONTAINER_NAME
+    blob_service_client = BlobServiceClient.from_connection_string(connection_string)
+    blob_client = blob_service_client.get_blob_client(container=container_name, blob=filename)
+
+    blob_client.upload_blob(file_data, overwrite=True)
+
+    blob_url = f"https://{blob_service_client.account_name}.blob.core.windows.net/{container_name}/{filename}"
+    return blob_url
