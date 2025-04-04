@@ -31,10 +31,10 @@ AZURE_CONTAINER_NAME = os.getenv("AZURE_CONTAINER_NAME")
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ["voice-dialogue-backend.azurewebsites.net"]
-# ALLOWED_HOSTS = ["*"]
+# ALLOWED_HOSTS = ["voice-dialogue-backend.azurewebsites.net"]
+ALLOWED_HOSTS = ["*"]
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 MEDIA_URL = '/media/'
@@ -138,13 +138,13 @@ STATIC_URL = "static/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-CORS_ALLOW_ALL_ORIGINS = False
-CORS_ALLOWED_ORIGINS = [
-    "https://zealous-stone-01b1dce00.6.azurestaticapps.net",  # 本番フロントエンド
-    "http://localhost:3000"               # ローカル開発用
-]
+CORS_ALLOW_ALL_ORIGINS = True
+# CORS_ALLOWED_ORIGINS = [
+#     "https://zealous-stone-01b1dce00.6.azurestaticapps.net",  # 本番フロントエンド
+#     "http://localhost:3000"               # ローカル開発用
+# ]
 
-CORS_ALLOW_HEADERS = list(default_headers) + [
-    "Accept",
-    "Content-Type",
-]
+# CORS_ALLOW_HEADERS = list(default_headers) + [
+#     "Accept",
+#     "Content-Type",
+# ]
