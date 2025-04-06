@@ -31,7 +31,7 @@ NIJI_VOICE_API_KEY = os.getenv("NIJI_VOICE_API_KEY")
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 # ALLOWED_HOSTS = ["voice-dialogue-backend.azurewebsites.net"]
 ALLOWED_HOSTS = ["*"]
